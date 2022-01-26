@@ -42,3 +42,5 @@ def plot_joint_density(mean1, mean2, cov, lims, ax=None, legend=True):
 
     ax.set_xlabel("$g_1$")
     ax.set_ylabel("$g_2$")
+
+    return ax
