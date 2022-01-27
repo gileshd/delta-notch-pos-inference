@@ -2,13 +2,17 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def mesh_density(pdf, lims=(-6.5, 6.5), x_lims=None, y_lims=None):
+def mesh_density(pdf, lims=(-6.5, 6.5), x_lims=None, y_lims=None, step=0.01):
+    """
+    Construct 2D meshgrid at points defined by lims and evaluate pdf
+     at every point.
+    """
     if x_lims is None:
         x_lims = lims
     if y_lims is None:
         y_lims = lims
 
-    x, y = np.mgrid[x_lims[0] : x_lims[1] : 0.01, y_lims[0] : y_lims[1] : 0.01]
+    x, y = np.mgrid[x_lims[0] : x_lims[1] : step, y_lims[0] : y_lims[1] : step]
     pos = np.dstack((x, y))
     density = pdf(pos)
     return x, y, density
