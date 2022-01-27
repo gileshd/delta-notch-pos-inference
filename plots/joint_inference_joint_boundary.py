@@ -9,7 +9,7 @@ from plotting_tools import plot_joint_with_marginals
 
 plt.style.use("thesis")
 
-OUT_FILE = "SDE_figures/joint_inference_joint_boundaries.pdf"
+OUT_FILE = "SDE_figures/joint_inference_joint_boundary.pdf"
 
 lims = (-5,5)
 
