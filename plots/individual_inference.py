@@ -9,7 +9,7 @@ from plotting_tools import plot_gauss_curves
 
 plt.style.use("thesis")
 
-OUT_FILE = "figures/individual_inference.pdf"
+OUT_FILE = "SDE_figures/individual_inference.pdf"
 
 xlims = (-5,5)
 g = np.linspace(*xlims,1000)
