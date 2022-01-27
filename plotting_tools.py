@@ -1,8 +1,9 @@
 import numpy as np
+from scipy import stats as st
 from matplotlib import pyplot as plt
 
 
-def mesh_density(pdf, lims=(-6.5, 6.5), x_lims=None, y_lims=None, step=0.01):
+def mesh_density(pdf, lims=(-6.5, 6.5), step=0.01, x_lims=None, y_lims=None):
     """
     Construct 2D meshgrid at points defined by lims and evaluate pdf
      at every point.
@@ -18,15 +19,21 @@ def mesh_density(pdf, lims=(-6.5, 6.5), x_lims=None, y_lims=None, step=0.01):
     return x, y, density
 
 
-def plot_joint_density(mean1, mean2, cov, lims, ax=None, legend=True):
+def plot_joint_density(
+    μ, cov, lims, ax=None, legend=True, legend_kws={"loc": "upper left"}, step=0.01
+):
+
     if ax is None:
         fig, ax = plt.subplots(1, 1)
-    pdf1 = lambda x: st.multivariate_normal.pdf(x, mean1, cov)
-    x, y, density = mesh_density(pdf1, lims)
+
+    z1, z2 = [0, 1], [1, 0]
+
+    pdf1 = lambda x: st.multivariate_normal.pdf(x, μ[z1], cov)
+    x, y, density = mesh_density(pdf1, lims, step)
     cntr1 = ax.contour(x, y, density, colors=f"C0")
 
-    pdf2 = lambda x: st.multivariate_normal.pdf(x, mean2, cov)
-    x, y, density = mesh_density(pdf2, lims)
+    pdf2 = lambda x: st.multivariate_normal.pdf(x, μ[z2], cov)
+    x, y, density = mesh_density(pdf2, lims, step)
     cntr2 = ax.contour(x, y, density, colors=f"C1")
 
     ax.set_xlim(*lims)
@@ -42,7 +49,14 @@ def plot_joint_density(mean1, mean2, cov, lims, ax=None, legend=True):
     if legend:
         h1, _ = cntr1.legend_elements()
         h2, _ = cntr2.legend_elements()
-        ax.legend([h1[0], h2[0]], [r"$z=\{1,2\}$", r"$z=\{2,1\}$"])
+        label_base = r"$p(\mathbf{{g}}|\mathbf{{z}}={})$"
+        label1 = label_base.format("\{1,2\}")
+        label2 = label_base.format("\{2,1\}")
+        ax.legend(
+            [h1[0], h2[0]],
+            [label1, label2],
+            **legend_kws,
+        )
 
     ax.set_xlabel("$g_1$")
     ax.set_ylabel("$g_2$")
@@ -58,10 +72,54 @@ def plot_gauss_curves(μ, lims, ax=None, orientation="horizontal"):
     for i, μi in enumerate(μ):
         f = st.norm.pdf(g, loc=μi)
         if orientation == "horizontal":
-            ax.plot(g, f)
+            ax.plot(g, f, label=f"$z={i+1}$")
         elif orientation == "vertical":
             ax.plot(f, g)
         else:
             raise ValueError("orientation must be either 'horizontal' or 'vertical'")
 
     return ax
+
+
+def plot_joint_with_marginals(
+    μ, cov, lims, legend=True, legend_kws={"loc": "upper left"}
+):
+    # start with a square Figure
+    fig = plt.figure(figsize=(8, 8))
+
+    # Add a gridspec with two rows and two columns and a ratio of 2 to 7 between
+    # the size of the marginal axes and the main axes in both directions.
+    # Also adjust the subplot parameters for a square plot.
+    gs = fig.add_gridspec(
+        2,
+        2,
+        width_ratios=(7, 2),
+        height_ratios=(2, 7),
+        left=0.1,
+        right=0.9,
+        bottom=0.1,
+        top=0.9,
+        wspace=0.0,
+        hspace=0.0,
+    )
+
+    ax_joint = fig.add_subplot(gs[1, 0])
+    ax_marg1 = fig.add_subplot(gs[0, 0], sharex=ax_joint)
+    ax_marg2 = fig.add_subplot(gs[1, 1], sharey=ax_joint)
+
+    for ax in (ax_marg1, ax_marg2):
+        ax.xaxis.set_visible(False)
+        ax.yaxis.set_visible(False)
+
+        ax.spines["top"].set_visible(False)
+        ax.spines["bottom"].set_visible(False)
+        ax.spines["left"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+
+    plot_joint_density(μ, cov, lims, ax=ax_joint, legend=legend, legend_kws=legend_kws)
+
+    z1, z2 = [0, 1], [1, 0]
+    plot_gauss_curves(μ[z1], lims, ax=ax_marg1)
+    plot_gauss_curves(μ[z2], lims, ax=ax_marg2, orientation="vertical")
+
+    return ax_joint, ax_marg1, ax_marg2
