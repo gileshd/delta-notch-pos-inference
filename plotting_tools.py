@@ -73,8 +73,10 @@ def plot_gauss_curves(μ, lims, ax=None, orientation="horizontal"):
         f = st.norm.pdf(g, loc=μi)
         if orientation == "horizontal":
             ax.plot(g, f, label=f"$z={i+1}$")
+            ax.set_ylim(0., f.max()+0.05);
         elif orientation == "vertical":
             ax.plot(f, g)
+            ax.set_xlim(0., f.max()+0.05);
         else:
             raise ValueError("orientation must be either 'horizontal' or 'vertical'")
 
