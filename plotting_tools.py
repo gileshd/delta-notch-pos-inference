@@ -44,3 +44,20 @@ def plot_joint_density(mean1, mean2, cov, lims, ax=None, legend=True):
     ax.set_ylabel("$g_2$")
 
     return ax
+
+
+def plot_gauss_curves(μ, lims, ax=None, orientation="horizontal"):
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    g = np.linspace(*lims, 1000)
+    for i, μi in enumerate(μ):
+        f = st.norm.pdf(g, loc=μi)
+        if orientation == "horizontal":
+            ax.plot(g, f)
+        elif orientation == "vertical":
+            ax.plot(f, g)
+        else:
+            raise ValueError("orientation must be either 'horizontal' or 'vertical'")
+
+    return ax
