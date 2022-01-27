@@ -17,7 +17,7 @@ g = np.linspace(*xlims,1000)
 μ = [μ1, μ2]
 thresh = (μ1 + μ2) / 2
 
-fig, ax = plt.subplots(1,1)
+fig, ax = plt.subplots(1,1,figsize=(8,4))
 
 ax = plot_gauss_curves(μ,xlims,ax=ax);
 
