@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import stats as st
 from matplotlib import pyplot as plt
+import seaborn as sns
 
 
 def make_joint_and_marginal_axes(marginal_spines_visible=False):
@@ -142,3 +143,28 @@ def plot_joint_with_marginals(
     return ax_joint, ax_marg1, ax_marg2
 
 
+def joint_and_marginal_kde(Y, axs, t, z):
+    """ Plot joint and marginal kde for bivariate data, Y."""
+
+    ls = ["dashed", "solid"][t]
+
+    joint_plot_kwargs = {
+        "linestyles": ls,
+        "linewidths": [None, 1.3][t],
+        "levels": [8, 6][t],
+        "thresh": [0.05, 0.1][t],
+    }
+
+    marginal_plot_kwargs = {"ls": ls}
+
+    kde_plot_kwargs = {
+        "color": f"C{z}",
+        "bw_adjust": [1, 0.25][t],
+    }
+
+    g1, g2 = Y.T
+    ax_joint, ax_marg1, ax_marg2 = axs
+
+    sns.kdeplot(x=g1, y=g2, ax=ax_joint, **joint_plot_kwargs, **kde_plot_kwargs)
+    sns.kdeplot(x=g1, ax=ax_marg1, **marginal_plot_kwargs, **kde_plot_kwargs)
+    sns.kdeplot(y=g2, ax=ax_marg2, **marginal_plot_kwargs, **kde_plot_kwargs)
