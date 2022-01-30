@@ -2,7 +2,11 @@ import numpy as np
 from scipy import stats as st
 from matplotlib import pyplot as plt
 
+
 def make_joint_and_marginal_axes():
+    """
+    Create axes for a joint plot with and marginals.
+    """
     # start with a square Figure
     fig = plt.figure(figsize=(8, 8))
 
@@ -19,7 +23,7 @@ def make_joint_and_marginal_axes():
         bottom=0.1,
         top=0.9,
         wspace=0.0,
-        hspace=0.0
+        hspace=0.0,
     )
 
     ax_joint = fig.add_subplot(gs[1, 0])
@@ -99,10 +103,10 @@ def plot_gauss_curves(μ, lims, ax=None, orientation="horizontal"):
         f = st.norm.pdf(g, loc=μi)
         if orientation == "horizontal":
             ax.plot(g, f, label=f"$z={i+1}$")
-            ax.set_ylim(0., f.max()+0.05);
+            ax.set_ylim(0.0, f.max() + 0.05)
         elif orientation == "vertical":
             ax.plot(f, g)
-            ax.set_xlim(0., f.max()+0.05);
+            ax.set_xlim(0.0, f.max() + 0.05)
         else:
             raise ValueError("orientation must be either 'horizontal' or 'vertical'")
 
@@ -131,6 +135,3 @@ def plot_joint_with_marginals(
     plot_gauss_curves(μ[z2], lims, ax=ax_marg2, orientation="vertical")
 
     return ax_joint, ax_marg1, ax_marg2
-
-
-
