@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+from matplotlib.collections import LineCollection
 
 
 def sample_y0_DN(μ1, μ2, cov, n_samples, notch=0.5):
@@ -36,3 +37,67 @@ def plot_DN_state_space(ys,ax=None, **plot_kwargs):
     ax.set_ylim(*lims)
 
     return ax
+
+
+def plot_delta_notch_time_course(y, ax=None):
+    gene_names = ["delta1","delta2","notch1","notch2"]
+    gene_label_dict = {
+        "delta1":r"$\mathrm{Delta}_1$",
+        "delta2":r"$\mathrm{Delta}_2$",
+        "notch1":r"$\mathrm{Notch}_1$",
+        "notch2":r"$\mathrm{Notch}_2$"
+    }
+
+    gene_color_dict = {
+        "delta1":"#054d80",
+        "delta2":"#6597b8",
+        "notch1":"#ad0c00",
+        "notch2":"#de7f78",
+    }
+
+    if ax is None:
+        fig, ax = plt.subplots()
+
+    t = np.linspace(0,1,len(y))
+
+    for n, g in enumerate(y.T):
+        gene = gene_names[n]
+        ax.plot(t,g,
+                 color=gene_color_dict[gene],
+                 label=gene_label_dict[gene]);
+
+    ax.set_xlim(0,1)
+    ylims = ax.get_ylim()
+    ax.set_ylim(0,ylims[1])
+
+    ax.legend();
+    ax.set_xlabel("time")
+    ax.set_ylabel("Expression");
+
+def plot_delta_delta_time_course(y):
+    d1, d2 = y[...,:2].T
+
+    # Create a set of line segments so that we can color them individually
+    # This creates the points as a N x 1 x 2 array so that we can stack points
+    # together easily to get the segments. The segments array for line collection
+    # needs to be (numlines) x (points per line) x 2 (for x and y)
+    points = np.array([d1, d2]).T.reshape(-1, 1, 2)
+    segments = np.concatenate([points[:-1], points[1:]], axis=1)
+    color = np.linspace(0,1,len(d1))
+
+
+    lc = LineCollection(segments, cmap='viridis')
+    lc.set_array(color)
+    lc.set_linewidth(2)
+
+    fig, ax = plt.subplots()
+    line = ax.add_collection(lc)
+    fig.colorbar(line, ax=ax,fraction=0.05, shrink=0.9, pad=-0.2)
+
+    ax.axis('scaled');
+    lim_max = max(d1.max(),d2.max())
+    ax.set_xlim(0,lim_max);
+    ax.set_ylim(0,lim_max);
+
+    ax.set_xlabel(r"$\mathrm{Delta}_1$");
+    ax.set_ylabel(r"$\mathrm{Delta}_2$");
