@@ -2,6 +2,32 @@ import numpy as np
 from scipy import stats as st
 from matplotlib import pyplot as plt
 
+def make_joint_and_marginal_axes():
+    # start with a square Figure
+    fig = plt.figure(figsize=(8, 8))
+
+    # Add a gridspec with two rows and two columns and a ratio of 2 to 7 between
+    # the size of the marginal axes and the main axes in both directions.
+    # Also adjust the subplot parameters for a square plot.
+    gs = fig.add_gridspec(
+        2,
+        2,
+        width_ratios=(7, 2),
+        height_ratios=(2, 7),
+        left=0.1,
+        right=0.9,
+        bottom=0.1,
+        top=0.9,
+        wspace=0.0,
+        hspace=0.0
+    )
+
+    ax_joint = fig.add_subplot(gs[1, 0])
+    ax_marg1 = fig.add_subplot(gs[0, 0], sharex=ax_joint)
+    ax_marg2 = fig.add_subplot(gs[1, 1], sharey=ax_joint)
+
+    return ax_joint, ax_marg1, ax_marg2
+
 
 def mesh_density(pdf, lims=(-6.5, 6.5), step=0.01, x_lims=None, y_lims=None):
     """
@@ -86,28 +112,8 @@ def plot_gauss_curves(μ, lims, ax=None, orientation="horizontal"):
 def plot_joint_with_marginals(
     μ, cov, lims, legend=True, legend_kws={"loc": "upper left"}
 ):
-    # start with a square Figure
-    fig = plt.figure(figsize=(8, 8))
 
-    # Add a gridspec with two rows and two columns and a ratio of 2 to 7 between
-    # the size of the marginal axes and the main axes in both directions.
-    # Also adjust the subplot parameters for a square plot.
-    gs = fig.add_gridspec(
-        2,
-        2,
-        width_ratios=(7, 2),
-        height_ratios=(2, 7),
-        left=0.1,
-        right=0.9,
-        bottom=0.1,
-        top=0.9,
-        wspace=0.0,
-        hspace=0.0,
-    )
-
-    ax_joint = fig.add_subplot(gs[1, 0])
-    ax_marg1 = fig.add_subplot(gs[0, 0], sharex=ax_joint)
-    ax_marg2 = fig.add_subplot(gs[1, 1], sharey=ax_joint)
+    ax_joint, ax_marg1, ax_marg2 = make_joint_and_marginal_axes()
 
     for ax in (ax_marg1, ax_marg2):
         ax.xaxis.set_visible(False)
@@ -125,3 +131,6 @@ def plot_joint_with_marginals(
     plot_gauss_curves(μ[z2], lims, ax=ax_marg2, orientation="vertical")
 
     return ax_joint, ax_marg1, ax_marg2
+
+
+
