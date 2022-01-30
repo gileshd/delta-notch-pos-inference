@@ -3,7 +3,7 @@ from scipy import stats as st
 from matplotlib import pyplot as plt
 
 
-def make_joint_and_marginal_axes():
+def make_joint_and_marginal_axes(marginal_spines_visible=False):
     """
     Create axes for a joint plot with and marginals.
     """
@@ -30,6 +30,16 @@ def make_joint_and_marginal_axes():
     ax_marg1 = fig.add_subplot(gs[0, 0], sharex=ax_joint)
     ax_marg2 = fig.add_subplot(gs[1, 1], sharey=ax_joint)
 
+    if marginal_spines_visible is False:
+        for ax in (ax_marg1, ax_marg2):
+            ax.xaxis.set_visible(False)
+            ax.yaxis.set_visible(False)
+
+            ax.spines["top"].set_visible(False)
+            ax.spines["bottom"].set_visible(False)
+            ax.spines["left"].set_visible(False)
+            ax.spines["right"].set_visible(False)
+
     return ax_joint, ax_marg1, ax_marg2
 
 
@@ -52,6 +62,7 @@ def mesh_density(pdf, lims=(-6.5, 6.5), step=0.01, x_lims=None, y_lims=None):
 def plot_joint_density(
     μ, cov, lims, ax=None, legend=True, legend_kws={"loc": "upper left"}, step=0.01
 ):
+    """ Plot density for bivariate normal with mean and covariance, μ, cov. """
 
     if ax is None:
         fig, ax = plt.subplots(1, 1)
@@ -95,6 +106,8 @@ def plot_joint_density(
 
 
 def plot_gauss_curves(μ, lims, ax=None, orientation="horizontal"):
+    """ Plot density for univarite normal with mean, μ. """
+
     if ax is None:
         fig, ax = plt.subplots(1, 1)
 
@@ -116,17 +129,9 @@ def plot_gauss_curves(μ, lims, ax=None, orientation="horizontal"):
 def plot_joint_with_marginals(
     μ, cov, lims, legend=True, legend_kws={"loc": "upper left"}
 ):
+    """ Plot joint and marginal densities for bivariate normal with mean and covariance, μ, cov. """
 
     ax_joint, ax_marg1, ax_marg2 = make_joint_and_marginal_axes()
-
-    for ax in (ax_marg1, ax_marg2):
-        ax.xaxis.set_visible(False)
-        ax.yaxis.set_visible(False)
-
-        ax.spines["top"].set_visible(False)
-        ax.spines["bottom"].set_visible(False)
-        ax.spines["left"].set_visible(False)
-        ax.spines["right"].set_visible(False)
 
     plot_joint_density(μ, cov, lims, ax=ax_joint, legend=legend, legend_kws=legend_kws)
 
@@ -135,3 +140,5 @@ def plot_joint_with_marginals(
     plot_gauss_curves(μ[z2], lims, ax=ax_marg2, orientation="vertical")
 
     return ax_joint, ax_marg1, ax_marg2
+
+
