@@ -143,7 +143,7 @@ def plot_joint_with_marginals(
     return ax_joint, ax_marg1, ax_marg2
 
 
-def joint_and_marginal_kde(Y, axs, t, z):
+def plot_joint_and_marginal_kde(Y, axs, t, z):
     """ Plot joint and marginal kde for bivariate data, Y."""
 
     ls = ["dashed", "solid"][t]
@@ -162,9 +162,12 @@ def joint_and_marginal_kde(Y, axs, t, z):
         "bw_adjust": [1, 0.25][t],
     }
 
+    label = f"t={t}, z={z}"
+
     g1, g2 = Y.T
     ax_joint, ax_marg1, ax_marg2 = axs
 
     sns.kdeplot(x=g1, y=g2, ax=ax_joint, **joint_plot_kwargs, **kde_plot_kwargs)
-    sns.kdeplot(x=g1, ax=ax_marg1, **marginal_plot_kwargs, **kde_plot_kwargs)
+    sns.kdeplot(x=g1, ax=ax_marg1, **marginal_plot_kwargs, **kde_plot_kwargs, label=label)
     sns.kdeplot(y=g2, ax=ax_marg2, **marginal_plot_kwargs, **kde_plot_kwargs)
+
