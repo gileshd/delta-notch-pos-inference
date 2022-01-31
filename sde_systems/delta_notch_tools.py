@@ -92,7 +92,7 @@ def plot_delta_delta_time_course(y):
 
     fig, ax = plt.subplots()
     line = ax.add_collection(lc)
-    fig.colorbar(line, ax=ax,fraction=0.05, shrink=0.9, pad=-0.2)
+    fig.colorbar(line, ax=ax,fraction=0.05, shrink=0.9, pad=-0.2, label="Time")
 
     ax.axis('scaled');
     lim_max = max(d1.max(),d2.max())
