@@ -13,13 +13,13 @@ from sde_systems.delta_notch_tools import plot_delta_notch_time_course
 
 plt.style.use("thesis")
 
-OUT_FILE = "SDE_figures/delta_notch_time_course.pdf"
+OUT_FILE = "SDE_figures/delta_notch_time_course_deterministic.pdf"
 
 t0, t1 = 0, 6
 nsteps = 1000
 ts = jnp.linspace(t0, t1, nsteps)
 
-noise_scale = 0.05
+noise_scale = 0.0
 args = (0.01,100,4,4,noise_scale)
 
 μ1, μ2 = 0.4,0.6

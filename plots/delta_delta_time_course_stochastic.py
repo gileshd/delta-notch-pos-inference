@@ -14,7 +14,7 @@ from sde_systems.delta_notch_tools import plot_delta_delta_time_course
 
 plt.style.use("thesis")
 
-OUT_FILE = "SDE_figures/delta_delta_time_course.pdf"
+OUT_FILE = "SDE_figures/delta_delta_time_course_stochastic.pdf"
 
 t0, t1 = 0, 6
 nsteps = 1000
