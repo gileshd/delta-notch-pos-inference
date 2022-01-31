@@ -106,20 +106,23 @@ def plot_joint_density(
     return ax
 
 
-def plot_gauss_curves(μ, lims, ax=None, orientation="horizontal"):
+def plot_gauss_curves(μ, lims, colors=None, ax=None, orientation="horizontal"):
     """ Plot density for univarite normal with mean, μ. """
 
     if ax is None:
         fig, ax = plt.subplots(1, 1)
 
+    if colors is None:
+        colors = [f"C{n}" for n in range(len(μ))]
+
     g = np.linspace(*lims, 1000)
     for i, μi in enumerate(μ):
         f = st.norm.pdf(g, loc=μi)
         if orientation == "horizontal":
-            ax.plot(g, f, label=f"$z={i+1}$")
+            ax.plot(g, f, color=colors[i], label=f"$z={i+1}$")
             ax.set_ylim(0.0, f.max() + 0.05)
         elif orientation == "vertical":
-            ax.plot(f, g)
+            ax.plot(f, g, color=colors[i])
             ax.set_xlim(0.0, f.max() + 0.05)
         else:
             raise ValueError("orientation must be either 'horizontal' or 'vertical'")
@@ -150,7 +153,7 @@ def plot_joint_and_marginal_kde(Y, axs, t, z):
 
     joint_plot_kwargs = {
         "linestyles": ls,
-        "linewidths": [None, 1.3][t],
+        "linewidths": [1.3, 1.3][t],
         "levels": [8, 6][t],
         "thresh": [0.05, 0.1][t],
     }

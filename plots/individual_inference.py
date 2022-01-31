@@ -19,7 +19,7 @@ thresh = (μ1 + μ2) / 2
 
 fig, ax = plt.subplots(1,1,figsize=(8,4))
 
-ax = plot_gauss_curves(μ,xlims,ax=ax);
+ax = plot_gauss_curves(μ,xlims,ax=ax,colors=["C2","C5"]);
 
 ax.vlines(thresh,0,0.5,ls='--',color="grey");
 
