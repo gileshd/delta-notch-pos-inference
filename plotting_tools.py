@@ -100,8 +100,8 @@ def plot_joint_density(
             **legend_kws,
         )
 
-    ax.set_xlabel("$g_1$")
-    ax.set_ylabel("$g_2$")
+    ax.set_xlabel("$g_A$")
+    ax.set_ylabel("$g_B$")
 
     return ax
 
