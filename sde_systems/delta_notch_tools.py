@@ -1,7 +1,13 @@
 import numpy as np
+from scipy import stats as st
 from matplotlib import pyplot as plt
 from matplotlib.collections import LineCollection
 
+
+def calculate_y0_std(μ1,μ2,p=0.95):
+    d = (μ2 - μ1)/2
+    τ = st.norm.ppf(0.95)
+    return d / τ
 
 def sample_y0_DN(μ1, μ2, cov, n_samples, notch=0.5):
     y0_delta = np.random.multivariate_normal(
@@ -42,10 +48,10 @@ def plot_DN_state_space(ys,ax=None, **plot_kwargs):
 def plot_delta_notch_time_course(y, ax=None):
     gene_names = ["delta1","delta2","notch1","notch2"]
     gene_label_dict = {
-        "delta1":r"$\mathrm{Delta}_1$",
-        "delta2":r"$\mathrm{Delta}_2$",
-        "notch1":r"$\mathrm{Notch}_1$",
-        "notch2":r"$\mathrm{Notch}_2$"
+        "delta1":r"$\mathrm{Delta_A}$",
+        "delta2":r"$\mathrm{Delta_B}$",
+        "notch1":r"$\mathrm{Notch_A}$",
+        "notch2":r"$\mathrm{Notch_B}$"
     }
 
     gene_color_dict = {
@@ -71,7 +77,7 @@ def plot_delta_notch_time_course(y, ax=None):
     ax.set_ylim(0,ylims[1])
 
     ax.legend();
-    ax.set_xlabel("time")
+    ax.set_xlabel("Time")
     ax.set_ylabel("Expression");
 
 def plot_delta_delta_time_course(y):
@@ -99,5 +105,5 @@ def plot_delta_delta_time_course(y):
     ax.set_xlim(0,lim_max);
     ax.set_ylim(0,lim_max);
 
-    ax.set_xlabel(r"$\mathrm{Delta}_1$");
-    ax.set_ylabel(r"$\mathrm{Delta}_2$");
+    ax.set_xlabel(r"$\mathrm{Delta_A}$");
+    ax.set_ylabel(r"$\mathrm{Delta_B}$");
