@@ -3,9 +3,11 @@ from scipy import stats as st
 from matplotlib import pyplot as plt
 from matplotlib.collections import LineCollection
 
+
 def drop_nans_DN(x):
-    nan_mask = np.isnan(x).any((1,2))
+    nan_mask = np.isnan(x).any((1, 2))
     return x[~nan_mask]
+
 
 def calculate_y0_std(μ1, μ2, p=0.90):
     """
