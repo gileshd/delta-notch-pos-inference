@@ -66,15 +66,15 @@ def optimal_threshold_joint_perf(dA, dB):
 
 def write_sde_results(ys, RESULTS_FILE_BASE):
     """ Write sde results to 4 txt files. """
-    genes = ["delta1", "delta2", "notch1", "notch2"]
+    n_genes = ys.shape[-1]
+    genes = ["deltaA", "deltaB", "notchA", "notchB"][:n_genes]
     for n, g in enumerate(genes):
         GENE_RESULTS_FILE = RESULTS_FILE_BASE.format(g)
         np.savetxt(GENE_RESULTS_FILE, ys[:, :, n], fmt="%.6f")
 
 
-def load_sde_results(RESULTS_FILE_BASE):
+def load_sde_results(RESULTS_FILE_BASE, genes = ["delta1", "delta2", "notch1", "notch2"]):
     """ Load sde results from 4 text files. """
-    genes = ["delta1", "delta2", "notch1", "notch2"]
     result_list = []
     for n, g in enumerate(genes):
         GENE_RESULTS_FILE = RESULTS_FILE_BASE.format(g)
