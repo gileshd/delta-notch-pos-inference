@@ -3,6 +3,9 @@ from scipy import stats as st
 from matplotlib import pyplot as plt
 from matplotlib.collections import LineCollection
 
+def drop_nans_DN(x):
+    nan_mask = np.isnan(x).any((1,2))
+    return x[~nan_mask]
 
 def calculate_y0_std(μ1, μ2, p=0.90):
     """
@@ -33,19 +36,45 @@ def sample_y0_DN_mixed(μ1, μ2, cov, batch_size, notch=0.5):
     return np.vstack((batch1, batch2))
 
 
-def write_sde_results(ys,RESULTS_FILE_BASE):
+def optimal_threshold_marg_perf(dA, dB):
+    """
+    Calculate the marginal performance of the optimal threshold to
+     distinguish between the distribution of values in dA, dB.
+    """
+    τ = np.linspace(0, 1, 1000)
+    sorted_idx = np.argsort(np.array([np.median(dA), np.median(dB)]))
+    d1, d2 = np.array([dA, dB])[sorted_idx]
+    B1 = d1[:, None] < τ[None, :]
+    B2 = d2[:, None] > τ[None, :]
+    p_marg_av = (B1.mean(0) + B2.mean(0)) / 2
+    return p_marg_av.max()
+
+
+def optimal_threshold_joint_perf(dA, dB):
+    """
+    Calculate the joint performance of the optimal threshold to
+     distinguish between the distribution of values in dA, dB.
+    """
+    τ = np.linspace(0, 1, 1000)
+    sorted_idx = np.argsort(np.array([np.median(dA), np.median(dB)]))
+    d1, d2 = np.array([dA, dB])[sorted_idx]
+    B = (d1[:, None] < τ[None, :]) & (d2[:, None] > τ[None, :])
+    return B.mean(0).max()
+
+
+def write_sde_results(ys, RESULTS_FILE_BASE):
     """ Write sde results to 4 txt files. """
-    genes = ["delta1","delta2","notch1","notch2"]
-    for n,g in enumerate(genes):
+    genes = ["delta1", "delta2", "notch1", "notch2"]
+    for n, g in enumerate(genes):
         GENE_RESULTS_FILE = RESULTS_FILE_BASE.format(g)
-        np.savetxt(GENE_RESULTS_FILE, ys[:,:,n],fmt="%.6f")
+        np.savetxt(GENE_RESULTS_FILE, ys[:, :, n], fmt="%.6f")
 
 
 def load_sde_results(RESULTS_FILE_BASE):
     """ Load sde results from 4 text files. """
-    genes = ["delta1","delta2","notch1","notch2"]
+    genes = ["delta1", "delta2", "notch1", "notch2"]
     result_list = []
-    for n,g in enumerate(genes):
+    for n, g in enumerate(genes):
         GENE_RESULTS_FILE = RESULTS_FILE_BASE.format(g)
         result_list.append(np.loadtxt(GENE_RESULTS_FILE))
     return np.dstack(result_list)
