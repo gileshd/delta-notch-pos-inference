@@ -32,6 +32,22 @@ def sample_y0_DN_mixed(μ1, μ2, cov, batch_size, notch=0.5):
     batch2 = sample_y0_DN(μ2, μ1, cov, batch_size, notch)
     return np.vstack((batch1, batch2))
 
+def write_sde_results(ys,RESULTS_FILE_BASE):
+    """ Write sde results to 4 txt files. """
+    genes = ["delta1","delta2","notch1","notch2"]
+    for n,g in enumerate(genes):
+        GENE_RESULTS_FILE = RESULTS_FILE_BASE.format(g)
+        np.savetxt(GENE_RESULTS_FILE, ys[:,:,n],fmt="%.6f")
+
+def load_sde_results(RESULTS_FILE_BASE):
+    """ Load sde results from 4 text files. """
+    genes = ["delta1","delta2","notch1","notch2"]
+    result_list = []
+    for n,g in enumerate(genes):
+        GENE_RESULTS_FILE = RESULTS_FILE_BASE.format(g)
+        result_list.append(np.loadtxt(GENE_RESULTS_FILE))
+    return np.dstack(result_list)
+
 
 def plot_DN_state_space(ys, ax=None, **plot_kwargs):
     """
