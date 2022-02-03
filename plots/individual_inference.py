@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+from scipy import stats as st
 from matplotlib import pyplot as plt
 
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
@@ -11,11 +12,14 @@ plt.style.use("thesis")
 
 OUT_FILE = "SDE_figures/individual_inference.pdf"
 
-xlims = (-5,5)
-g = np.linspace(*xlims,1000)
-μ1, μ2 = -1.4, 1.4
+p = 0.9
+τ = st.norm.ppf(p)
+μ1, μ2 = -τ, τ
 μ = [μ1, μ2]
 thresh = (μ1 + μ2) / 2
+
+xlims = (-5,5)
+g = np.linspace(*xlims,1000)
 
 fig, ax = plt.subplots(1,1,figsize=(8,4))
 

@@ -1,6 +1,7 @@
 import os
 import sys
 import numpy as np
+from scipy import stats as st
 from matplotlib import pyplot as plt
 
 sys.path.insert(1, os.path.join(sys.path[0], ".."))
@@ -12,7 +13,10 @@ plt.style.use("thesis")
 OUT_FILE = "SDE_figures/joint_inference_independent_boundaries.pdf"
 
 lims = (-5,5)
-μ1, μ2 = -1.4, 1.4
+
+p = 0.9
+τ = st.norm.ppf(p)
+μ1, μ2 = -τ, τ
 z1, z2 = [0,1], [1,0]
 μ = np.array([μ1,μ2])
 cov = np.diag([1,1])
