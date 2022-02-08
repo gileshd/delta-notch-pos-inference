@@ -11,8 +11,8 @@ from sde_systems.delta_notch_tools import (
     drop_nans_DN
 )
 
-noise_scale = 0
-args = (0.01, 100, 4, 4, noise_scale)
+# noise_scale = 0
+# args = (0.01, 100, 4, 4, noise_scale)
 
 
 def run_delta_notch_sde(args, n_samples, z=0, dt=0.01, drop_nans=True):
