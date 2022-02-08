@@ -1,6 +1,5 @@
 from jax import numpy as jnp
-from jax import jit, vmap
-from jaxsde.jaxsde import sdeint_ito
+from jaxsde.jaxsde.sdeint import sdeint_ito, sdeint_ito_fixed_grid
 
 # noise_scale = 0.05
 # args = (0.01, 100., 4., 4., noise_scale)
@@ -40,3 +39,7 @@ def decay(y):
 
 def DN_sdeint_ito(y0, ts, rng, args, dt=0.001):
     return sdeint_ito(f, g, y0, ts, rng, args, dt)
+
+def DN_sdeint_ito_fixed_grid(y0, ts, rng, args, dt=0.001):
+    return sdeint_ito_fixed_grid(f, g, y0, ts, rng, args, dt)
+
