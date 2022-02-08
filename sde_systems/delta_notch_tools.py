@@ -168,6 +168,8 @@ def plot_delta_delta_time_course(y):
 
 def plot_delta_delta_time_course_multi(ys):
 
+    ys = drop_nans_DN(ys)
+
     fig, ax = plt.subplots()
 
     for y in ys:
