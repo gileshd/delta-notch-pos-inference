@@ -35,7 +35,8 @@ def sample_y0_eq_jit(key,n_samples=1000):
 @jit
 def sample_y0_eq_single(key):
     μ = jnp.array([0.5,0.5])
-    cov = jnp.diag(jnp.ones(2)) * 0.05**2
+    cov = jnp.array([[1,0.5],
+                 [0.5,1]]) * 0.03**2
     y0_delta = random.multivariate_normal(key,μ,cov)
     y0_notch = jnp.ones(2) * 0.5
     return jnp.hstack((y0_delta,y0_notch))
