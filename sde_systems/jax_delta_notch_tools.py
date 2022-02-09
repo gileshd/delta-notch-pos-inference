@@ -22,7 +22,6 @@ DN_sdeint_fg_single = jit(lambda y0, key, args: DN_sdeint_ito_fixed_grid(y0,ts_f
 DN_sdeint_fg = jit(vmap(lambda y0, key, args: DN_sdeint_ito_fixed_grid(y0,ts_fg,key,args,dt=0.001),
                      (0,0,None)))
 
-
 @partial(jit,static_argnums=1)
 def sample_y0_eq_jit(key,n_samples=1000):
     μ = jnp.array([0.5,0.5])
@@ -67,11 +66,14 @@ def args_perf_single(args,key):
     y0, y1 = ys[0,:2], ys[-1,:2]
     return compare_y0y1(y0,y1)
 
-@jit
-def a_perf_single(a,key):
+
+# Not jitting so that autoreload works.
+def a_perf_single_no_jit(a,key):
     """ Sample performance of parameter `a`."""
     args = (a, 100.,4.,4.,0.05)
     return args_perf_single(args,key)
+
+a_perf_single = jit(a_perf_single_no_jit)
 
 @jit
 def mean_perf_y0y1(ys):
