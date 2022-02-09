@@ -59,19 +59,18 @@ def sample_args_perf(args,key,y0):
     return mean_perf_y0y1(ys)
 
 @jit
-def args_perf_single(args,key):
+def args_perf_single(args,key,y0):
     """ Sample performance of `args`."""
-    y0 = sample_y0_eq_single(key)
     ys = DN_sdeint_fg_single(y0,key,args)
     y0, y1 = ys[0,:2], ys[-1,:2]
     return compare_y0y1(y0,y1)
 
 
 # Not jitting so that autoreload works.
-def a_perf_single_no_jit(a,key):
+def a_perf_single_no_jit(a,key,y0):
     """ Sample performance of parameter `a`."""
     args = (a, 100.,4.,4.,0.05)
-    return args_perf_single(args,key)
+    return args_perf_single(args,key,y0)
 
 a_perf_single = jit(a_perf_single_no_jit)
 
