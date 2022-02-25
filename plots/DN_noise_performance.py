@@ -26,7 +26,7 @@ plt.hlines(ind_perf,*noise_lims,ls='-.',color="grey",label="Idependent Joint Per
 plt.legend(loc="lower left");
 plt.xlim(*noise_lims);
 plt.ylim(0.5,1);
-plt.xlabel("Noise scale");
+plt.xlabel(r"Noise scale, $\eta$");
 plt.ylabel("Performance");
 
 plt.savefig(OUT_FILE,bbox_inches="tight")
