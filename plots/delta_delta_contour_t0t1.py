@@ -23,7 +23,7 @@ z_batch_size = int(n_samples/2)
 ys_z0 = drop_nans_DN(ys[:z_batch_size,...])
 ys_z1 = drop_nans_DN(ys[z_batch_size:,...])
 
-ax_joint, ax_marg1, ax_marg2 = make_joint_and_marginal_axes()
+ax_joint, ax_marg1, ax_marg2 = make_joint_and_marginal_axes(figsize=(10,10))
 axs = (ax_joint, ax_marg1, ax_marg2)
 
 sample_size = 50000
