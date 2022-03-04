@@ -165,7 +165,8 @@ def plot_joint_and_marginal_kde(Y, axs, t, z):
         "bw_adjust": [1, 0.25][t],
     }
 
-    label = f"t={t}, z={z}"
+    z_label = ["[1,2]", "[2,1]"][z]
+    label = f"$\\mathbf{{z}}={z_label}$, $t={t}$"
 
     g1, g2 = Y.T
     ax_joint, ax_marg1, ax_marg2 = axs
