@@ -12,30 +12,26 @@ plt.style.use("thesis")
 
 OUT_FILE = "SDE_figures/delta_delta_contour_t0t1.pdf"
 
-genes = ["delta1","delta2","notch1","notch2"]
-n_samples = 100000
-ys = np.zeros((n_samples,100,4))
-for n,g in enumerate(genes):
-    RESULTS_FILE = f"../results/DN_trajectories_04-06_{g}.txt"
-    ys[:,:,n] = np.loadtxt(RESULTS_FILE)
-    
-z_batch_size = int(n_samples/2)
-ys_z0 = drop_nans_DN(ys[:z_batch_size,...])
-ys_z1 = drop_nans_DN(ys[z_batch_size:,...])
 
-ax_joint, ax_marg1, ax_marg2 = make_joint_and_marginal_axes(figsize=(10,10))
+RESULTS_FILE = "../results/noise_experiments/delta_delta_t0t1_2/DD_t0t1_noise-0500_{}.txt"
+ys_load = load_sde_results(RESULTS_FILE,genes=["deltaA","deltaB"])
+
+ax_joint, ax_marg1, ax_marg2 = make_joint_and_marginal_axes()
 axs = (ax_joint, ax_marg1, ax_marg2)
 
-sample_size = 50000
-y0_z0 = ys_z0[:sample_size,0,:2]
-y1_z0 = ys_z0[:sample_size,-1,:2]
-y0_z1 = ys_z1[:sample_size,0,:2]
-y1_z1 = ys_z1[:sample_size,-1,:2]
+n_subsamples = 100000
+y0_z1, y0_z2 = ys_load[:n_subsamples,0,:].T
+y1_z1, y1_z2 = ys_load[:n_subsamples,1,:].T
 
-plot_joint_and_marginal_kde(y0_z0, axs, t=0,z=0)
-plot_joint_and_marginal_kde(y0_z1, axs, t=0,z=1)
-plot_joint_and_marginal_kde(y1_z0, axs, t=1,z=0)
-plot_joint_and_marginal_kde(y1_z1, axs, t=1,z=1)
+y0_z12 = np.vstack((y0_z1, y0_z2)).T
+y0_z21 = np.vstack((y0_z2, y0_z1)).T
+y1_z12 = np.vstack((y1_z1, y1_z2)).T
+y1_z21 = np.vstack((y1_z2, y1_z1)).T
+
+plot_joint_and_marginal_kde(y0_z12, axs, t=0,z=0)
+plot_joint_and_marginal_kde(y0_z21, axs, t=0,z=1)
+plot_joint_and_marginal_kde(y1_z12, axs, t=1,z=0)
+plot_joint_and_marginal_kde(y1_z21, axs, t=1,z=1)
 
 ax_joint.axis('scaled');
 ax_joint.set_xlabel(r"$\mathrm{Delta_A}$");
