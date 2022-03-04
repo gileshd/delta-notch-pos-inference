@@ -146,6 +146,7 @@ def plot_joint_with_marginals(
     return ax_joint, ax_marg1, ax_marg2
 
 
+# TODO: Add option to scale alpha of contours.
 def plot_joint_and_marginal_kde(Y, axs, t, z):
     """ Plot joint and marginal kde for bivariate data, Y."""
 
@@ -155,7 +156,7 @@ def plot_joint_and_marginal_kde(Y, axs, t, z):
         "linestyles": ls,
         "linewidths": [1.3, 1.3][t],
         "levels": [8, 6][t],
-        "thresh": [0.05, 0.1][t],
+        "thresh": [0.05, 0.05][t],
     }
 
     marginal_plot_kwargs = {"ls": ls}
