@@ -4,12 +4,12 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 
 
-def make_joint_and_marginal_axes(marginal_spines_visible=False):
+def make_joint_and_marginal_axes(marginal_spines_visible=False, figsize=(8,8)):
     """
     Create axes for a joint plot with and marginals.
     """
     # start with a square Figure
-    fig = plt.figure(figsize=(8, 8))
+    fig = plt.figure(figsize=figsize)
 
     # Add a gridspec with two rows and two columns and a ratio of 2 to 7 between
     # the size of the marginal axes and the main axes in both directions.
