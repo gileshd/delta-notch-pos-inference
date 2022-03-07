@@ -19,9 +19,9 @@ noise_perf = np.loadtxt(NOISE_FILE)
 plt.figure(figsize=(10,6))
 
 plt.hlines(bayes_opt,*noise_lims,ls='--',color="C5",label="Optimal Joint Performace");
-plt.plot(noise_range,noise_perf,color="C0",label="Independent Joint Performance $t=1$");
+plt.plot(noise_range,noise_perf,color="C0",label="Joint Performance $t=1$");
 plt.hlines(p_marg,*noise_lims,ls='dotted',color="grey", label="Marginal Performance $t=0$");
-plt.hlines(ind_perf,*noise_lims,ls='-.',color="grey",label="Idependent Joint Performance $t=0$");
+plt.hlines(ind_perf,*noise_lims,ls='-.',color="grey",label="Joint Performance $t=0$");
 
 plt.legend(loc="lower left");
 plt.xlim(*noise_lims);
