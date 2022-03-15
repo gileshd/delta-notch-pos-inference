@@ -5,22 +5,26 @@ plt.style.use("thesis")
 
 OUT_FILE = "../SDE_figures/ab_grad_opt_trajectory.pdf"
 
-### LOAD RESULTS ###
-P_RESULTS_DIR = "../../ab_performance_results/param_points_100"
+### LOAD PARAM PERF ###
+P_RESULTS_DIR = "../../ab_performance_results/param_points_100/d1_thresh_0-5"
+P_FILE = "P_thresh_np100_10e3"
 N = 20
 P_array = np.zeros((100,100,N))
 for i in range(N):
-    P_array[...,i] = np.loadtxt(f"{P_RESULTS_DIR}/P_np100_10e3_{i}.txt")
+    P_array[...,i] = np.loadtxt(f"{P_RESULTS_DIR}/{P_FILE}_{i}.txt")
 P = P_array.mean(-1)
 
-OPT_RESULTS_DIR = "../../ab_grad_results/log_opt/lr1-1/"
-opt_results_files_suffixes = ["0_5","4_4","0_0-5", "5_0-5"]
+### LOAD OPTIMIZATION RESULTS ###
+OPT_RESULTS_DIR = "../../ab_grad_results/log_opt/thresh_perf/"
+OPT_FILE = "log_thresh_opt_ab0"
+opt_results_files_suffixes = ["4_1","4_4","0_0-5", "0_4-8"]
 
-params = np.zeros((500,2,len(opt_results_files_suffixes)))
-perfs = np.zeros((500,len(opt_results_files_suffixes)))
+params = np.zeros((200,2,len(opt_results_files_suffixes)))
+perfs = np.zeros((200,len(opt_results_files_suffixes)))
 for n,sfx in enumerate(opt_results_files_suffixes):
-    params[...,n] = np.loadtxt(f"{OPT_RESULTS_DIR}/param_log_opt_ab0_{sfx}.txt")[:500,:]
-    perfs[...,n] = np.loadtxt(f"{OPT_RESULTS_DIR}/perf_log_opt_ab0_{sfx}.txt")[:500]
+    params[...,n] = np.loadtxt(f"{OPT_RESULTS_DIR}/param_{OPT_FILE}_{sfx}.txt")[:200,:]
+    perfs[...,n] = np.loadtxt(f"{OPT_RESULTS_DIR}/perf_{OPT_FILE}_{sfx}.txt")[:200]
+
 
 ### PLOT RESULTS ###
 N_param_samples = 100
