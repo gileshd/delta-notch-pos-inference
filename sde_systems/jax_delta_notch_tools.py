@@ -72,13 +72,13 @@ def args_perf_single_no_jit(args, key, y0):
     """ Calculate performance of `args` for sample `y0`."""
     ys = DN_sdeint_fg_single(y0, key, args)
     y0, y1 = ys[0, :2], ys[-1, :2]
-    return compare_y0y1(y0, y1)
+    return smooth_thresh_perf_y0y1(y0, y1)
 
 
 args_perf_single = jit(args_perf_single_no_jit)
 
 noise_scale = 0.05
-args = (0.01, 100, 4, 4, noise_scale)
+args = (0.01, 100., 4., 4., noise_scale)
 
 ab_perf_single_no_jit = lambda a, b, key, y0: args_perf_single_no_jit(
     (a, b, *args[2:]), key, y0
@@ -117,11 +117,20 @@ def compare_y0y1(y0, y1):
     dA1, dB1 = y1
     return smooth_lt(dA1, dB1) * (dA0 < dB0) + smooth_gt(dA1, dB1) * (dA0 > dB0)
 
+@jit
+def smooth_thresh_perf_y0y1(y0, y1, τ=0.5):
+    """
+    Smoothly classify d1 and compare to d0. 
+    """
+    dA0, dB0 = y0
+    dA1, dB1 = y1
+    thresh_pred_AB = sigmoid_tanh(τ - dA1) * sigmoid_tanh(dB1 - τ)
+    thresh_pred_BA = sigmoid_tanh(dA1 - τ) * sigmoid_tanh(τ - dB1)
+    return (dA0 < dB0) * thresh_pred_AB + (dA0 > dB0) * thresh_pred_BA
 
 @jit
 def smooth_lt(x, y):
     return sigmoid_tanh(y - x)
-
 
 @jit
 def smooth_gt(x, y):
