@@ -141,7 +141,6 @@ def smooth_gt(x, y):
 def sigmoid_tanh(x, scale=20):
     return 0.5 * (jnp.tanh(x * scale / 2) + 1)
 
-
 @jit
 def sigmoid_exp(x, scale=20):
-    return 0.5 * (jnp.tanh(x * scale / 2) + 1)
+    return 1 / (1 + jnp.exp(-x * scale))
