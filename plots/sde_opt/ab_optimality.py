@@ -23,7 +23,7 @@ A, B = np.meshgrid(a_array,b_array)
 
 fig, axs = plt.subplots(1,2,figsize=(8,4))
 
-beta_array = [1.,30.]
+beta_array = [1.,10.]
 
 #ax.pcolormesh(A,B,O,shading="gouraud");
 for β,ax in zip(beta_array,axs):
@@ -33,7 +33,7 @@ for β,ax in zip(beta_array,axs):
     ax.set_yscale("log")
     ax.set_xlabel("a",fontsize=15)
     ax.set_ylabel("b",fontsize=15);
-    ax.text(0.1, 0.1,r"$\beta = {}$".format(β),color="w",transform=ax.transAxes)
+    ax.text(0.07, 0.07, r"$\beta = {}$".format(β),color="w",transform=ax.transAxes)
 
 plt.tight_layout()
 plt.savefig(OUT_FILE,bbox_inches="tight")
