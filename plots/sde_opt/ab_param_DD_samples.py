@@ -29,11 +29,15 @@ key = random.PRNGKey(111)
 keys = random.split(key, n_samples)
 y0 = sample_y0_DN_jit(key, n_samples=n_samples)
 
-ys_ab1 = DN_sdeint(y0, keys, args1)
-ys_ab1 = drop_nans_DN(ys_ab1)
+ys_ab1 = DN_sdeint(y0,keys,args1)
+ys_ab2 = DN_sdeint(y0,keys,args2)
 
-ys_ab2 = DN_sdeint(y0, keys, args2)
-ys_ab2 = drop_nans_DN(ys_ab2)
+# Make sure we are using the same initial samples for each.
+nan_mask1 = np.isnan(ys_ab1).any((1, 2))
+nan_mask2 = np.isnan(ys_ab2).any((1, 2))
+nan_mask_comb = nan_mask1 | nan_mask2
+
+ys_ab1, ys_ab2 = ys_ab1[~nan_mask_comb], ys_ab2[~nan_mask_comb]
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
