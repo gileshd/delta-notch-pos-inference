@@ -101,6 +101,9 @@ def plot_DN_state_space(ys, ax=None, **plot_kwargs):
     ax.set_xlim(*lims)
     ax.set_ylim(*lims)
 
+    ax.set_xlabel(r"$\mathrm{Delta_A}$")
+    ax.set_ylabel(r"$\mathrm{Delta_B}$")
+
     return ax
 
 
@@ -166,11 +169,12 @@ def plot_delta_delta_time_course(y):
     ax.set_ylabel(r"$\mathrm{Delta_B}$")
 
 
-def plot_delta_delta_time_course_multi(ys):
+def plot_delta_delta_time_course_multi(ys,ax=None):
 
     ys = drop_nans_DN(ys)
 
-    fig, ax = plt.subplots()
+    if ax is None:
+        fig, ax = plt.subplots()
 
     for y in ys:
         d1, d2 = y[..., :2].T
@@ -183,7 +187,7 @@ def plot_delta_delta_time_course_multi(ys):
         segments = np.concatenate([points[:-1], points[1:]], axis=1)
         color = np.linspace(0, 1, len(d1))
 
-        lc = LineCollection(segments, cmap="viridis")
+        lc = LineCollection(segments, cmap="viridis",alpha=0.8)
         lc.set_array(color)
         lc.set_linewidth(2)
 
