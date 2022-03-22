@@ -51,6 +51,9 @@ plot_DN_state_space(ys_ab2[dA1 < dB1], ax=ax2, alpha=0.6)
 if (dA1 > dB1).any():
     plot_DN_state_space(ys_ab2[dA1 > dB1], ax=ax2, color="C5", alpha=0.6)
 
+ax1.plot([0,1],[0,1],ls="--", color="grey")
+ax2.plot([0,1],[0,1],ls="--", color="grey")
+
 plt.tight_layout()
 
 plt.savefig(OUT_FILE, bbox_inches="tight")
