@@ -74,6 +74,18 @@ def args_perf_single_no_jit(args, key, y0):
     y0, y1 = ys[0, :2], ys[-1, :2]
     return smooth_thresh_perf_y0y1(y0, y1)
 
+def args_perf_single_fg_no_jit(args, key, y0):
+    """ Calculate performance of `args` for sample `y0`."""
+    ys = DN_sdeint_fg_single(y0, key, args)
+    y0, y1 = ys[0, :2], ys[-1, :2]
+    return smooth_thresh_perf_y0y1(y0, y1)
+
+def args_perf_single_wavey_grid_no_jit(args, key, y0):
+    """ Calculate performance of `args` for sample `y0`."""
+    ys = DN_sdeint_single(y0, key, args)
+    y0, y1 = ys[0, :2], ys[-1, :2]
+    return smooth_thresh_perf_y0y1(y0, y1)
+
 
 args_perf_single = jit(args_perf_single_no_jit)
 
@@ -81,6 +93,14 @@ noise_scale = 0.05
 args = (0.01, 100., 4., 4., noise_scale)
 
 ab_perf_single_no_jit = lambda a, b, key, y0: args_perf_single_no_jit(
+    (a, b, *args[2:]), key, y0
+)
+
+ab_perf_single_fg_no_jit = lambda a, b, key, y0: args_perf_single_fg_no_jit(
+    (a, b, *args[2:]), key, y0
+)
+
+ab_perf_single_wavey_grid_no_jit = lambda a, b, key, y0: args_perf_single_wavey_grid_no_jit(
     (a, b, *args[2:]), key, y0
 )
 
